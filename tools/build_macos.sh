@@ -19,15 +19,13 @@ echo "==> Construction de l'application graphique (.app)"
 echo "==> Construction de la ligne de commande"
 "$PYTHON" -m PyInstaller tools/cli_similarite.spec --noconfirm
 
-echo "==> Ajout du jeu d'exemples dans les dossiers de distribution"
-for target in DetecteurDeSimilarite CLI-Similarite; do
-    rm -rf "dist/$target/samples"
-    cp -R samples "dist/$target/samples"
-done
+echo "==> Ajout du jeu d'exemples dans le dossier de la CLI"
+rm -rf "dist/CLI-Similarite/samples"
+cp -R samples "dist/CLI-Similarite/samples"
 
 echo "==> Termine"
-echo "    dist/DetecteurDeSimilarite/DetecteurDeSimilarite.app"
+echo "    dist/DetecteurDeSimilarite.app"
 echo "    dist/CLI-Similarite/CLI-Similarite"
 echo
 echo "Si macOS bloque l'ouverture :"
-echo "    xattr -dr com.apple.quarantine dist/DetecteurDeSimilarite/DetecteurDeSimilarite.app"
+echo "    xattr -dr com.apple.quarantine dist/DetecteurDeSimilarite.app"

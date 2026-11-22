@@ -115,8 +115,10 @@ les démonstrations en console.
 PyInstaller ne permet pas de cross-compiler : un binaire macOS **ne peut pas être
 généré depuis Windows**. Deux solutions sont prévues :
 
-1. **Le télécharger tout fait** — pousser un tag `v*` (ou lancer le workflow
-   manuellement). La GitHub Action `Build macOS` compile sur `macos-15-intel` (Intel)
+1. **Le télécharger tout fait** — depuis la
+   [release v1.0-macos](https://github.com/BELMOKHTAR-LOUNES/Detecteur_Similairte/releases/tag/v1.0-macos)
+   (ou en poussant un tag `v*` / en lançant le workflow manuellement). La GitHub
+   Action `Build macOS` compile sur `macos-15-intel` (Intel)
    et `macos-15` (Apple Silicon), puis fournit deux artifacts :
    `macos-intel` et `macos-apple-silicon`, ainsi qu'une release contenant
    `DetecteurDeSimilarite-intel.app.zip`, `DetecteurDeSimilarite-apple-silicon.app.zip`,
@@ -132,7 +134,7 @@ généré depuis Windows**. Deux solutions sont prévues :
 Résultats attendus :
 
 ```text
-dist/DetecteurDeSimilarite/DetecteurDeSimilarite.app
+dist/DetecteurDeSimilarite.app
 dist/CLI-Similarite/CLI-Similarite
 ```
 

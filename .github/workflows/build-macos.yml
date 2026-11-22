@@ -46,16 +46,14 @@ jobs:
 
       - name: Add samples to dist folders
         run: |
-          for target in DetecteurDeSimilarite CLI-Similarite; do
-            rm -rf "dist/$target/samples"
-            cp -R samples "dist/$target/samples"
-          done
+          rm -rf "dist/CLI-Similarite/samples"
+          cp -R samples "dist/CLI-Similarite/samples"
 
       - name: Package artifacts
         run: |
           mkdir -p dist/macos
           ditto -c -k --keepParent \
-            dist/DetecteurDeSimilarite/DetecteurDeSimilarite.app \
+            dist/DetecteurDeSimilarite.app \
             "dist/macos/DetecteurDeSimilarite-${{ matrix.arch }}.app.zip"
           tar -czf "dist/macos/CLI-Similarite-${{ matrix.arch }}.tar.gz" \
             -C dist/CLI-Similarite .
