@@ -116,8 +116,8 @@ PyInstaller ne permet pas de cross-compiler : un binaire macOS **ne peut pas êt
 généré depuis Windows**. Deux solutions sont prévues :
 
 1. **Le télécharger tout fait** — pousser un tag `v*` (ou lancer le workflow
-   manuellement). La GitHub Action `Build macOS` compile sur `macos-13` (Intel)
-   et `macos-14` (Apple Silicon), puis fournit deux artifacts :
+   manuellement). La GitHub Action `Build macOS` compile sur `macos-15-intel` (Intel)
+   et `macos-15` (Apple Silicon), puis fournit deux artifacts :
    `macos-intel` et `macos-apple-silicon`, ainsi qu'une release contenant
    `DetecteurDeSimilarite-intel.app.zip`, `DetecteurDeSimilarite-apple-silicon.app.zip`,
    `CLI-Similarite-intel.tar.gz` et `CLI-Similarite-apple-silicon.tar.gz`.
@@ -144,7 +144,7 @@ xattr -dr com.apple.quarantine DetecteurDeSimilarite.app
 ```
 
 L'application n'étant pas signée avec un certificat Developer ID, ce message
-est normal. Prévoir macOS 12 ou plus récent.
+est normal. Prévoir macOS 13 ou plus récent.
 
 ### Évaluation
 
