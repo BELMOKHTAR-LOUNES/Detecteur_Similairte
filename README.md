@@ -156,7 +156,7 @@ projet/
 ├── evaluation/                # Scénarios étiquetés, métriques, graphiques
 ├── samples/                   # Jeu d'essai organisé par catégorie
 ├── tools/                     # Spécifications PyInstaller (reconstruction)
-├── docs/                      # Rapport de projet (Markdown + PDF)
+├── docs/                      # Guide d'oral, guide technique et rapport (PDF)
 └── dist/                      # Exécutables Windows préconstruits
 ```
 
@@ -170,7 +170,8 @@ projet/
 
 Le niveau 3 est conçu pour la comparaison **inter-langages** : sur des
 fichiers de même langage, préférer les niveaux 1 et 2, plus discriminants
-(voir `docs/rapport.md` pour la discussion détaillée).
+(voir `docs/guide_complet_projet.pdf` pour le guide de présentation orale, et
+`docs/guide_technique_detaille.pdf` pour la documentation technique complète).
 
 ## Auteur
 
