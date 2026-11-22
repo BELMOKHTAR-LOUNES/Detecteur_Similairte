@@ -107,7 +107,44 @@ py -m PyInstaller tools/cli_similarite.spec --noconfirm         # version consol
 
 Les spécifications `tools/*.spec` déclarent les grammaires *tree-sitter* comme
 imports cachés (elles sont chargées dynamiquement et sinon absentes du
-paquet). Chaque dossier `dist\...` contient déjà une copie de `samples\`.
+paquet). Le dossier `dist\CLI-Similarite\` contient une copie de `samples\` pour
+les démonstrations en console.
+
+### Exécutable macOS
+
+PyInstaller ne permet pas de cross-compiler : un binaire macOS **ne peut pas être
+généré depuis Windows**. Deux solutions sont prévues :
+
+1. **Le télécharger tout fait** — pousser un tag `v*` (ou lancer le workflow
+   manuellement). La GitHub Action `Build macOS` compile sur `macos-13` (Intel)
+   et `macos-14` (Apple Silicon), puis fournit deux artifacts :
+   `macos-intel` et `macos-apple-silicon`, ainsi qu'une release contenant
+   `DetecteurDeSimilarite-intel.app.zip`, `DetecteurDeSimilarite-apple-silicon.app.zip`,
+   `CLI-Similarite-intel.tar.gz` et `CLI-Similarite-apple-silicon.tar.gz`.
+
+2. **Le construire sur un Mac** :
+
+   ```bash
+   chmod +x tools/build_macos.sh
+   ./tools/build_macos.sh
+   ```
+
+Résultats attendus :
+
+```text
+dist/DetecteurDeSimilarite/DetecteurDeSimilarite.app
+dist/CLI-Similarite/CLI-Similarite
+```
+
+Si macOS refuse d'ouvrir l'application téléchargée (Gatekeeper), retirer le
+marqueur de quarantaine :
+
+```bash
+xattr -dr com.apple.quarantine DetecteurDeSimilarite.app
+```
+
+L'application n'étant pas signée avec un certificat Developer ID, ce message
+est normal. Prévoir macOS 12 ou plus récent.
 
 ### Évaluation
 
@@ -155,7 +192,8 @@ projet/
 │   └── console.py             #   Rendu texte de la CLI
 ├── evaluation/                # Scénarios étiquetés, métriques, graphiques
 ├── samples/                   # Jeu d'essai organisé par catégorie
-├── tools/                     # Spécifications PyInstaller (reconstruction)
+├── tools/                     # Specs PyInstaller + script de build macOS
+├── .github/workflows/         # Build macOS (Intel + Apple Silicon)
 ├── docs/                      # Guide d'oral, guide technique et rapport (PDF)
 └── dist/                      # Exécutables Windows préconstruits
 ```

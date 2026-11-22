@@ -10,6 +10,7 @@ démarrage rapide, dossier de distribution transparent).
 """
 
 import os
+import sys
 
 # Racine du projet : le fichier .spec se trouve dans tools/.
 PROJECT_ROOT = os.path.dirname(SPECPATH)
@@ -75,3 +76,14 @@ coll = COLLECT(
     upx_exclude=[],
     name="DetecteurDeSimilarite",
 )
+
+# Sur macOS, on enveloppe le dossier onedir dans une vraie application .app.
+# BUNDLE est un no-op sur les autres plateformes, mais on garde le garde-fou
+# pour que la specification reste lisible/executable partout.
+if sys.platform == "darwin":
+    app = BUNDLE(
+        coll,
+        name="DetecteurDeSimilarite.app",
+        icon=None,
+        bundle_identifier="com.projetpa.detecteur-similarite",
+    )

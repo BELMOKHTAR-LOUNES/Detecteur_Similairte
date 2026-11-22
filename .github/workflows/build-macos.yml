@@ -1,0 +1,76 @@
+name: Build macOS
+
+# PyInstaller ne cross-compile pas : les executables macOS sont construits
+# directement sur des runners macOS, pour Intel et Apple Silicon.
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: macOS (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-13
+            arch: intel
+          - runner: macos-14
+            arch: apple-silicon
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install pyinstaller
+
+      - name: Build GUI and CLI
+        run: |
+          python -m PyInstaller tools/detecteur_similarite.spec --noconfirm
+          python -m PyInstaller tools/cli_similarite.spec --noconfirm
+
+      - name: Add samples to dist folders
+        run: |
+          for target in DetecteurDeSimilarite CLI-Similarite; do
+            rm -rf "dist/$target/samples"
+            cp -R samples "dist/$target/samples"
+          done
+
+      - name: Package artifacts
+        run: |
+          mkdir -p dist/macos
+          ditto -c -k --keepParent \
+            dist/DetecteurDeSimilarite/DetecteurDeSimilarite.app \
+            "dist/macos/DetecteurDeSimilarite-${{ matrix.arch }}.app.zip"
+          tar -czf "dist/macos/CLI-Similarite-${{ matrix.arch }}.tar.gz" \
+            -C dist/CLI-Similarite .
+
+      - name: Upload macOS executables
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-${{ matrix.arch }}
+          path: dist/macos/*
+          if-no-files-found: error
+
+      - name: Publish release assets
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/macos/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
