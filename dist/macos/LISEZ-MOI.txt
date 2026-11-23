@@ -1,0 +1,20 @@
+Executables macOS (PyInstaller, non signes).
+
+Choisir l'archive selon votre machine :
+  - intel : Mac Intel
+  - apple-silicon : Mac M1/M2/M3...
+
+DetecteurDeSimilarite-<arch>.app.zip : application graphique.
+CLI-Similarite-<arch>.tar.gz : ligne de commande + dossier samples/.
+
+Sur le Mac, extraire l'application avec :
+  ditto -x -k DetecteurDeSimilarite-<arch>.app.zip .
+
+Pour la CLI :
+  tar -xzf CLI-Similarite-<arch>.tar.gz
+
+Puis lancer l'application. Si macOS bloque l'ouverture :
+  xattr -dr com.apple.quarantine DetecteurDeSimilarite.app
+
+L'application n'etant pas signee avec un certificat Developer ID, ce message
+est normal. macOS 13 ou plus recent est necessaire.
