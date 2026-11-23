@@ -1,7 +1,8 @@
 name: Build macOS
 
 # PyInstaller ne cross-compile pas : les executables macOS sont construits
-# directement sur des runners macOS, pour Intel et Apple Silicon.
+# directement sur des runners macOS, pour Intel et Apple Silicon, puis
+# fusionnes en binaires universels (x86_64 + arm64).
 on:
   workflow_dispatch:
   push:
@@ -65,10 +66,54 @@ jobs:
           path: dist/macos/*
           if-no-files-found: error
 
+  universal:
+    name: macOS universel
+    needs: build
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download architecture-specific artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: macos-*
+          path: artifacts
+
+      - name: Extract builds
+        run: |
+          mkdir -p work/intel work/arm work/universal
+          ditto -x -k artifacts/macos-intel/DetecteurDeSimilarite-intel.app.zip work/intel
+          ditto -x -k artifacts/macos-apple-silicon/DetecteurDeSimilarite-apple-silicon.app.zip work/arm
+          tar -xzf artifacts/macos-intel/CLI-Similarite-intel.tar.gz -C work/intel
+          tar -xzf artifacts/macos-apple-silicon/CLI-Similarite-apple-silicon.tar.gz -C work/arm
+
+      - name: Merge into universal binaries
+        run: bash tools/merge_macos_universal.sh work/intel work/arm work/universal
+
+      - name: Package universal artifacts
+        run: |
+          mkdir -p dist/macos
+          ditto -c -k --keepParent \
+            work/universal/DetecteurDeSimilarite.app \
+            dist/macos/DetecteurDeSimilarite-universal.app.zip
+          tar -czf dist/macos/CLI-Similarite-universal.tar.gz \
+            -C work/universal/CLI-Similarite .
+
+      - name: Upload universal executables
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-universal
+          path: dist/macos/*
+          if-no-files-found: error
+
       - name: Publish release assets
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/macos/*
+          files: |
+            dist/macos/DetecteurDeSimilarite-universal.app.zip
+            dist/macos/CLI-Similarite-universal.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

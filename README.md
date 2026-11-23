@@ -116,20 +116,25 @@ PyInstaller ne permet pas de cross-compiler : un binaire macOS **ne peut pas êt
 généré depuis Windows**. Deux solutions sont prévues :
 
 1. **Le télécharger tout fait** — depuis la
-   [release v1.0-macos](https://github.com/BELMOKHTAR-LOUNES/Detecteur_Similairte/releases/tag/v1.0-macos)
+   [release v1.1-universal](https://github.com/BELMOKHTAR-LOUNES/Detecteur_Similairte/releases/tag/v1.1-universal)
    (ou en poussant un tag `v*` / en lançant le workflow manuellement). La GitHub
-   Action `Build macOS` compile sur `macos-15-intel` (Intel)
-   et `macos-15` (Apple Silicon), puis fournit deux artifacts :
-   `macos-intel` et `macos-apple-silicon`, ainsi qu'une release contenant
-   `DetecteurDeSimilarite-intel.app.zip`, `DetecteurDeSimilarite-apple-silicon.app.zip`,
-   `CLI-Similarite-intel.tar.gz` et `CLI-Similarite-apple-silicon.tar.gz`.
+   Action `Build macOS` compile sur `macos-15-intel` et `macos-15`, puis fusionne
+   les deux versions avec `lipo`. La release ne contient que deux archives,
+   valables sur **Intel et Apple Silicon** :
 
-2. **Le construire sur un Mac** :
+   - `DetecteurDeSimilarite-universal.app.zip`
+   - `CLI-Similarite-universal.tar.gz`
+
+2. **Le construire sur un Mac** : le script produit une application native pour
+   la machine courante.
 
    ```bash
    chmod +x tools/build_macos.sh
    ./tools/build_macos.sh
    ```
+
+   Si les builds Intel et arm64 sont déjà présents dans `work/intel` et
+   `work/arm`, le script `tools/merge_macos_universal.sh` permet de les fusionner.
 
 Résultats attendus :
 
