@@ -56,7 +56,9 @@ merge_tree "$INTEL_DIR/CLI-Similarite" \
            "$OUT_DIR/CLI-Similarite"
 
 echo "==> Signature ad-hoc de l'application"
-codesign --force --deep --sign - "$OUT_DIR/DetecteurDeSimilarite.app"
+if ! codesign --force --deep --sign - "$OUT_DIR/DetecteurDeSimilarite.app"; then
+    echo "    Attention : signature ad-hoc impossible, l'application restera non signee."
+fi
 
 echo "==> Verification des architectures"
 lipo -info "$OUT_DIR/DetecteurDeSimilarite.app/Contents/MacOS/DetecteurDeSimilarite"

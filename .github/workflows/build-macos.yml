@@ -69,7 +69,7 @@ jobs:
   universal:
     name: macOS universel
     needs: build
-    runs-on: macos-15
+    runs-on: macos-15-intel
 
     steps:
       - name: Checkout
@@ -83,11 +83,11 @@ jobs:
 
       - name: Extract builds
         run: |
-          mkdir -p work/intel work/arm work/universal
+          mkdir -p work/intel/CLI-Similarite work/arm/CLI-Similarite work/universal
           ditto -x -k artifacts/macos-intel/DetecteurDeSimilarite-intel.app.zip work/intel
           ditto -x -k artifacts/macos-apple-silicon/DetecteurDeSimilarite-apple-silicon.app.zip work/arm
-          tar -xzf artifacts/macos-intel/CLI-Similarite-intel.tar.gz -C work/intel
-          tar -xzf artifacts/macos-apple-silicon/CLI-Similarite-apple-silicon.tar.gz -C work/arm
+          tar -xzf artifacts/macos-intel/CLI-Similarite-intel.tar.gz -C work/intel/CLI-Similarite
+          tar -xzf artifacts/macos-apple-silicon/CLI-Similarite-apple-silicon.tar.gz -C work/arm/CLI-Similarite
 
       - name: Merge into universal binaries
         run: bash tools/merge_macos_universal.sh work/intel work/arm work/universal
