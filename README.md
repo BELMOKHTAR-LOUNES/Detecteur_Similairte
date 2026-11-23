@@ -86,16 +86,12 @@ Options principales : `--level {1,2,3,auto}`, `--kgram N`,
 
 ### Exécution sans Python (exécutable Windows)
 
-Des exécutables autonomes sont fournis dans `dist\` :
+L'application graphique autonome est fournie dans `dist\DetecteurDeSimilarite\` :
+lancer `DetecteurDeSimilarite.exe`.
 
-- **`dist\DetecteurDeSimilarite\`** — version graphique ; lancer
-  `DetecteurDeSimilarite.exe` (dossier `samples\` joint pour démonstration).
-- **`dist\CLI-Similarite\`** — version console ; même usage que `cli.py` :
-
-```bash
-dist\CLI-Similarite\CLI-Similarite.exe --ref samples\identical\bubble_sort_ref.py \
-     --cands samples\modified\bubble_sort_renamed.py --level auto
-```
+La version console n'est pas livrée en binaire Windows dans ce dépôt. Elle
+s'utilise avec Python (`python cli.py ...`, voir ci-dessus) ou se reconstruit
+avec la spécification fournie.
 
 Pour **reconstruire** les exécutables (après modification du code) :
 
@@ -107,8 +103,8 @@ py -m PyInstaller tools/cli_similarite.spec --noconfirm         # version consol
 
 Les spécifications `tools/*.spec` déclarent les grammaires *tree-sitter* comme
 imports cachés (elles sont chargées dynamiquement et sinon absentes du
-paquet). Le dossier `dist\CLI-Similarite\` contient une copie de `samples\` pour
-les démonstrations en console.
+paquet). Le dossier `samples\` reste nécessaire aux démonstrations et à
+l'évaluation (`evaluation/`).
 
 ### Exécutable macOS
 
@@ -124,6 +120,8 @@ généré depuis Windows**. Deux solutions sont prévues :
 
    - `DetecteurDeSimilarite-universal.app.zip`
    - `CLI-Similarite-universal.tar.gz`
+
+   Elles sont également fournies dans `dist/macos/`.
 
 2. **Le construire sur un Mac** : le script produit une application native pour
    la machine courante.
@@ -199,10 +197,10 @@ projet/
 │   └── console.py             #   Rendu texte de la CLI
 ├── evaluation/                # Scénarios étiquetés, métriques, graphiques
 ├── samples/                   # Jeu d'essai organisé par catégorie
-├── tools/                     # Specs PyInstaller + script de build macOS
-├── .github/workflows/         # Build macOS (Intel + Apple Silicon)
+├── tools/                     # Specs PyInstaller + scripts de build/fusion macOS
+├── .github/workflows/         # Build macOS universel (Intel + Apple Silicon)
 ├── docs/                      # Guide d'oral, guide technique et rapport (PDF)
-└── dist/                      # Exécutables Windows préconstruits
+└── dist/                      # Exécutable Windows GUI + archives macOS universelles
 ```
 
 ## Seuils et interprétation
